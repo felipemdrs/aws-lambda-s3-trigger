@@ -1,0 +1,24 @@
+service: aws-lambda-s3-trigger
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: '20201221'
+
+package:
+  individually: true
+  exclude:
+    - 'node_modules/**'
+    - 'package*'
+    - 'README.md'
+    - 'LICENSE'
+    - '.gitignore'
+    - 'requirements.txt'
+    - 'ci/*'
+    - '.github/**'
+
+functions:
+  main:
+    handler: src/handler.lambda_handler
