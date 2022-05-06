@@ -2,10 +2,20 @@ service: aws-lambda-s3-trigger
 
 frameworkVersion: '3'
 
+custom:
+  bucketName: "felipemdrs-aws-lambda-s3-trigger"
+
 provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: '20201221'
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:GetObject"
+          Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
 
 package:
   individually: true
@@ -22,3 +32,10 @@ package:
 functions:
   main:
     handler: src/handler.lambda_handler
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploads/
+            - suffix: .csv
