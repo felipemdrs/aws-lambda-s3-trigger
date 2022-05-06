@@ -32,6 +32,9 @@ package:
 functions:
   main:
     handler: src/handler.lambda_handler
+    environment:
+      # Max size is 1MB
+      MAX_CHUNCK_IN_BYTES: 256000 # 256KB
     events:
       - s3:
           bucket: ${self:custom.bucketName}
