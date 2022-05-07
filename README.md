@@ -21,7 +21,7 @@ of Brazil.
 
 ## Usage for other csv
 
-Must be contains headers and csv delimiter is ';' that can easyly configurated in `fieldDelimiter`. 
+Must be contains headers and csv delimiter is `;` that can easyly configurated in `fieldDelimiter`. 
 
 
 ## Data access
