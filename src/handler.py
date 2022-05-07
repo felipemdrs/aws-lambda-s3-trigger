@@ -5,6 +5,7 @@ import os
 
 
 logger = None
+fieldDelimiter = ';'
 
 def lambda_handler(event, context):
   global logger
@@ -20,6 +21,7 @@ def lambda_handler(event, context):
 
     total_rows = 0
 
+    # Set of ufs
     ufs = set()
 
     for row in process_file(*record_info):
@@ -72,7 +74,7 @@ def stream_file_to_json(bucket: str, key: str, file_size: int, chunk_bytes: int)
       InputSerialization={
         'CSV': {
           'FileHeaderInfo': 'USE',
-          'FieldDelimiter': ';',
+          'FieldDelimiter': fieldDelimiter,
           'RecordDelimiter': '\n'
         }
       },

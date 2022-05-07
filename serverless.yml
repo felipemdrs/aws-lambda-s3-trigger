@@ -10,6 +10,8 @@ provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: '20201221'
+  memorySize: 200
+  # Allow lambda to read bucket file
   iam:
     role:
       statements:
@@ -26,9 +28,9 @@ package:
     - 'README.md'
     - 'LICENSE'
     - '.gitignore'
-    - '.serverless/**'
     - 'requirements.txt'
     - 'ci/*'
+    - 'example/*'
     - '.github/**'
     - 'venv/**'
 
@@ -48,6 +50,7 @@ functions:
             - prefix: uploads/
             - suffix: .csv
 
+# Create S3 bucket and add existing KMS key
 resources:
   Resources:
     S3Bucket:
