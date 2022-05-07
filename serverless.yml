@@ -4,6 +4,7 @@ frameworkVersion: '3'
 
 custom:
   bucketName: "felipemdrs-aws-lambda-s3-trigger"
+  accountId: ${aws:accountId}
 
 provider:
   name: aws
@@ -25,13 +26,16 @@ package:
     - 'README.md'
     - 'LICENSE'
     - '.gitignore'
+    - '.serverless/**'
     - 'requirements.txt'
     - 'ci/*'
     - '.github/**'
+    - 'venv/**'
 
 functions:
   main:
     handler: src/handler.lambda_handler
+    awsKmsKeyArn: 'arn:aws:kms:us-east-1:${self:custom.accountId}:alias/my_kms_key'
     environment:
       # Max size is 1MB
       MAX_CHUNCK_IN_BYTES: 256000 # 256KB
@@ -39,6 +43,20 @@ functions:
       - s3:
           bucket: ${self:custom.bucketName}
           event: s3:ObjectCreated:*
+          existing: true
           rules:
             - prefix: uploads/
             - suffix: .csv
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketName}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: aws:kms
+                KMSMasterKeyID: 'arn:aws:kms:us-east-1:${self:custom.accountId}:alias/my_kms_key'
+      DeletionPolicy: Delete

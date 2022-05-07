@@ -48,8 +48,8 @@ def parse_record(record) -> tuple:
 def process_file(bucket: str, key: str, file_size: int):
   logger.info(f'Initiating streaming file {key} of {file_size} bytes')
 
-  ## Max size is 1MB
-  chunk_size = 256000 #256KB in Bytes
+  # Max size is 1MB
+  chunk_size = os.getenv('MAX_CHUNCK_IN_BYTES')
 
   for file_chunk in stream_file_to_json(bucket, key, file_size, chunk_size):
     logger.info(f'\n{30 * "*"} New chunk {30 * "*"}')
